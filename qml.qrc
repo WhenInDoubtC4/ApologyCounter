@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Counter.qml</file>
+        <file>Resources/RobotoMono.ttf</file>
+        <file>Style.qml</file>
+        <file>Stats.qml</file>
+        <file>Resources/bar-chart-line-fill.svg</file>
+        <file>Resources/bullseye.svg</file>
+        <file>Resources/sliders.svg</file>
+        <file>Resources/plus-lg.svg</file>
+        <file>Resources/chevron-down.svg</file>
+        <file>Resources/chevron-up.svg</file>
+        <file>Resources/trash-fill.svg</file>
+        <file>Resources/dash-circle-fill.svg</file>
+        <file>Resources/chevron-left.svg</file>
+        <file>Resources/chevron-right.svg</file>
+    </qresource>
+</RCC>
