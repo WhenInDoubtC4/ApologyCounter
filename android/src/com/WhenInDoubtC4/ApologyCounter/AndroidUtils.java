@@ -3,20 +3,27 @@ package com.WhenInDoubtC4.ApologyCounter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.os.Build;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.text.InputType;
-import android.content.Context;
+import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Build;
+import android.text.Html;
+import android.text.InputType;
 import android.view.View;
 import android.view.WindowManager;
-import android.text.Html;
+import android.widget.EditText;
 
 public class AndroidUtils
 {
     private static native void createNewCounter(String name);
     private static native void deleteCounter();
+    public static native Activity getAndroidActivity();
+    public static native String getWidgetName(int index);
+    public static native String getWidgetDisplayName(int index);
+    public static native int getCountForName(String name);
+    public static native void incrementCounter(String name);
 
     @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public void displayNewCounterMessageBox(Activity activity)
@@ -62,26 +69,41 @@ public class AndroidUtils
         });
     }
 
-    public void displayDeleteCounterMessageBox(Activity activity, String displayName) {
+    public void displayDeleteCounterMessageBox(Activity activity, String displayName)
+    {
         activity.runOnUiThread(() -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
             builder.setTitle("Delete counter");
             builder.setMessage(Html.fromHtml("Are your sure you want to delete the counter for <b>" + displayName + "</b>? This will delete all the stats and data!"));
 
-            builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
+            builder.setPositiveButton("Delete", new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialog, int id)
+                {
                     deleteCounter();
                 }
             });
 
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialog, int id)
+                {
                 }
             });
 
             AlertDialog dialog = builder.create();
             dialog.show();
         });
+    }
+
+    public void requestUpdateWidget()
+    {
+        Intent intent = new Intent(getAndroidActivity(), AndroidWidget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int[] ids = AppWidgetManager.getInstance(getAndroidActivity().getApplication())
+                .getAppWidgetIds(new ComponentName(getAndroidActivity().getApplication(), AndroidWidget.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        getAndroidActivity().sendBroadcast(intent);
     }
 }

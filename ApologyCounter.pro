@@ -1,4 +1,4 @@
-QT += quick widgets charts svg androidextras
+QT += core quick widgets charts svg
 
 CONFIG += c++17
 
@@ -9,6 +9,7 @@ CONFIG += c++17
 SOURCES += \
         Counter.cpp \
         CounterManager.cpp \
+        Settings.cpp \
         Stats.cpp \
         main.cpp
 
@@ -28,6 +29,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
 	Counter.h \
 	CounterManager.h \
+	Global.h \
+	Settings.h \
 	Stats.h
 
 ios {
@@ -39,6 +42,8 @@ ios {
 }
 
 android {
+	QT += androidextras
+
 	SOURCES += \
 			AndroidUtils.cpp
 
@@ -55,7 +60,8 @@ OTHER_FILES += \
 	android/gradlew \
 	android/gradlew.bat \
 	android/res/values/libs.xml \
-	android/src/com/WhenInDoubtC4/ApologyCounter/AndroidUtils.java
+	android/src/com/WhenInDoubtC4/ApologyCounter/AndroidUtils.java \
+	android/src/com/WhenInDoubtC4/ApologyCounter/AndroidWidget.java
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

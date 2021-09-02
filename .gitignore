@@ -12,7 +12,8 @@ moc_*.*
 Debug*/
 makefile
 qrc_qml.cpp
+*.properties
 *.mak
-*.xcodeproj/
+*.xcuserstate
 
 IOSWidget/

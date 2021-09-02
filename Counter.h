@@ -4,17 +4,13 @@
 #include <QSettings>
 #include <QDateTime>
 
+#include "Global.h"
+
 #if defined(Q_OS_IOS)
 #include "IOSUtils.h"
 #elif defined(Q_OS_ANDROID)
 #include "AndroidUtils.h"
 #endif
-
-#define DATA_COUNT "count"
-#define DATA_ARRAY "counterData"
-#define DATA_NAME "name"
-#define DATA_TIME_DATA "timeData"
-#define DATA_TIMESTAMP "timestamp"
 
 class Counter : public QObject
 {
@@ -40,14 +36,17 @@ public:
 private:
 	int _count = 0;
 	QString _name;
-	QSettings _settings = QSettings("WhenInDoubtC4", "ApologyCounter");
+	QSettings _settings;
     
-#ifdef Q_OS_IOS
+#if defined(Q_OS_IOS) or defined(Q_OS_ANDROID)
     bool _dialogOpen = false;
 #endif
 
 public slots:
     Q_INVOKABLE void deleteCounter();
+
+private slots:
+	void onIncrementRequested(const QString name);
     
 signals:
 	void countChanged();

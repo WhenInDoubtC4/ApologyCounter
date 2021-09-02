@@ -15,5 +15,7 @@
         <file>Resources/dash-circle-fill.svg</file>
         <file>Resources/chevron-left.svg</file>
         <file>Resources/chevron-right.svg</file>
+        <file>Settings.qml</file>
+        <file>CounterComboBox.qml</file>
     </qresource>
 </RCC>

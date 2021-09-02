@@ -4,6 +4,7 @@
 
 Stats::Stats(QObject* parent) : QObject(parent)
 {
+    
 }
  
 void Stats::updateChart(QQuickItem* chartView)
@@ -17,9 +18,7 @@ void Stats::updateChart(QQuickItem* chartView)
         if (chart) break;
     }
     if (!chart) throw std::runtime_error("Can't find chart");
-    
-    qDebug() << "Upadting diagram, selected:" << _chartRangeSelected << "range point index:" << _rangePointIndex;
-    
+        
     //Set up charts
     updateChartRanges();
     
@@ -30,6 +29,7 @@ void Stats::updateChart(QQuickItem* chartView)
     auto series = new QBarSeries();
     auto set = new QBarSet(_name);
     
+    const int chartWidth = chart->plotArea().width();
     float lineRadius = 0.f;
     QString horAxisDateFormat;
     switch (_chartRangeSelected)
@@ -44,7 +44,7 @@ void Stats::updateChart(QQuickItem* chartView)
             break;
         case Stats::chartRange::CHART_RANGE_YEAR:
             lineRadius = 6.f;
-            horAxisDateFormat = chart->plotArea().width() >= 600 ? "MMM" : "M";
+            horAxisDateFormat = chartWidth >= 600 ? "MMM" : "M";
             break;
     }
     const float lineThickness = lineRadius / (chart->plotArea().height() / 2.f);
@@ -84,8 +84,8 @@ void Stats::updateChart(QQuickItem* chartView)
     horAxisGridLinePen.setStyle(Qt::DashLine);
     
     QAbstractAxis* horAxis = nullptr;
-    //Category axis is too dense for months, use unattached date time axis
-    if (_chartRangeSelected == Stats::chartRange::CHART_RANGE_MONTH)
+    //Category axis is too dense for months (or years with small screens), use unattached date time axis
+    if (_chartRangeSelected == Stats::chartRange::CHART_RANGE_MONTH || (_chartRangeSelected == Stats::chartRange::CHART_RANGE_YEAR && chartWidth < 400))
     {
         auto dateTimeAxis = new QDateTimeAxis();
         dateTimeAxis->setMin(dates.first().startOfDay());
@@ -145,14 +145,9 @@ void Stats::updateChartRanges()
     
     const quint64 diffrence = start.daysTo(end);
     
-    _chartRangeAllowed[Stats::chartRange::CHART_RANGE_WEEK] = diffrence > 2;
+    _chartRangeAllowed[Stats::chartRange::CHART_RANGE_WEEK] = diffrence > 0;
     _chartRangeAllowed[Stats::chartRange::CHART_RANGE_MONTH] = diffrence > 7;
     _chartRangeAllowed[Stats::chartRange::CHART_RANGE_YEAR] = diffrence > 30;
-    
-    qDebug() << "Dif:" << diffrence
-        << "Week:" << _chartRangeAllowed[Stats::chartRange::CHART_RANGE_WEEK]
-        << "Month:" << _chartRangeAllowed[Stats::chartRange::CHART_RANGE_MONTH]
-        << "Year:" << _chartRangeAllowed[Stats::chartRange::CHART_RANGE_YEAR];
     
     //Read all data
     QList<QDateTime> dates;
@@ -211,8 +206,9 @@ void Stats::updateChartRanges()
     
     //Months
     if (!_chartRangeAllowed[Stats::chartRange::CHART_RANGE_MONTH]) return;
-    const int difInMonths = (dailyData.lastKey().year() - dailyData.firstKey().year()) * 12 + dailyData.lastKey().month() - dailyData.firstKey().month();
-    const qint64 difInDays = dailyData.lastKey().addMonths(-difInMonths).daysTo(dailyData.lastKey());
+	int difInMonths = (dailyData.lastKey().year() - dailyData.firstKey().year()) * 12 + dailyData.lastKey().month() - dailyData.firstKey().month();
+	if (Q_UNLIKELY(difInMonths == 0)) difInMonths = 1;
+	const qint64 difInDays = dailyData.lastKey().addMonths(-difInMonths).daysTo(dailyData.lastKey());
     startDate = dailyData.lastKey();
     QMap<QDate, int> totalCountInMonth;
     QMap<QDate, int> currentMonth;

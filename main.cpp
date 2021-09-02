@@ -1,10 +1,12 @@
 #include <QApplication>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QSettings>
 
 #include "Counter.h"
 #include "CounterManager.h"
 #include "Stats.h"
+#include "Settings.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,11 +19,16 @@ int main(int argc, char *argv[])
 	QApplication::setApplicationName("ApologyCounter");
 	QApplication::setOrganizationName("WhenInDoubtC4");
 
+#ifdef Q_OS_ANDROID
+	QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation));
+#endif
+
 	qmlRegisterSingletonType(QUrl("qrc:/Style.qml"), "style", 1, 0, "Style");
 
 	qmlRegisterType<Counter>("counter", 1, 0, "CounterBackend");
 	qmlRegisterType<CounterManager>("counterManager", 1, 0, "CounterManager");
 	qmlRegisterType<Stats>("stats", 1, 0, "StatsBackend");
+	qmlRegisterType<Settings>("settings", 1, 0, "SettingsBacked");
 
 	QQmlApplicationEngine engine;
 	const QUrl url(QStringLiteral("qrc:/main.qml"));

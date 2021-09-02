@@ -37,10 +37,12 @@ Window {
 
     Component.onCompleted: () =>
                            {
+                               console.log("ON COMPLETED CALLED")
                                for (const counterData of backend.getCounters())
                                {
                                    listModel.append({dispName: counterData.displayName, n: counterData.name})
                                }
+                               console.log(backend.getCounters())
                                updateStats()
                            }
 
@@ -132,12 +134,14 @@ Window {
         id: swipeView
         width: parent.width
         height: parent.height - menuHeight
-        currentIndex: 0
+        currentIndex: 1
+
+        Settings {
+            id: settingsPage
+        }
 
         ListView {
             id: listView
-            /*width: parent.width
-            height: parent.height*/
             spacing: 1
             delegate: SwipeDelegate {
                 id: swipeDelegate
@@ -248,8 +252,7 @@ Window {
                                        {
                                            swipe.close()
                                            statsPage.initName = ct.name
-                                           swipeView.setCurrentIndex(1)
-                                           //centerStack.replace(mainPageButton)
+                                           swipeView.setCurrentIndex(2)
                                        }
                                    }
                 onPressed: swipeView.interactive = false
@@ -287,21 +290,28 @@ Window {
 
         onCurrentIndexChanged: () =>
                                {
-                                   if (swipeView.currentIndex !== 0)
+                                   if (swipeView.currentIndex !== 1)
                                    {
                                        centerStack.replace(mainPageButton)
                                        //Stats
-                                       if (swipeView.currentIndex === 1)
+                                       if (swipeView.currentIndex === 2)
                                        {
                                            statsPage.update()
                                            statsButton.checked = true
+                                       }
+                                       //Settings
+                                       else if (swipeView.currentIndex === 0)
+                                       {
+                                           settingsPage.counters = backend.getCounters()
+                                           settingsPage.update()
+                                           settingsButton.checked = true
                                        }
                                    }
                                    else
                                    {
                                        centerStack.replace(addNewButton)
                                        statsButton.checked = false
-                                       mainPageButton.checked = true
+                                       settingsButton.checked = false
                                    }
                                }
     }
@@ -352,7 +362,11 @@ Window {
                                       {
                                           let clr = checked ? Style.secondaryLight : Style.text
                                           settingsLabel.color = clr
-                                          if (checked) centerStack.replace(mainPageButton)
+                                          if (checked)
+                                          {
+                                              centerStack.replace(mainPageButton)
+                                              swipeView.setCurrentIndex(0)
+                                          }
                                       }
 
                     Text {
@@ -437,7 +451,7 @@ Window {
                                    {
                                        statsButton.checked = false
                                        settingsButton.checked = false
-                                       swipeView.setCurrentIndex(0)
+                                       swipeView.setCurrentIndex(1)
                                    }
                     }
                 }
@@ -462,7 +476,7 @@ Window {
                                           dataLabel.color = clr
                                           if (checked)
                                           {
-                                              swipeView.setCurrentIndex(1)
+                                              swipeView.setCurrentIndex(2)
                                               statsPage.initName = ""
                                           }
                                       }
@@ -484,3 +498,9 @@ Window {
 
 
 }
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+##^##*/

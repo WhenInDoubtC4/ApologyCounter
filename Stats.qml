@@ -11,36 +11,29 @@ Item {
 
     function update()
     {
-        model.clear()
+        comboBox.listModel.clear()
         for (const counter of counters)
         {
-            model.append({name: counter.name, displayName: counter.displayName})
-        }
-
-        if (model.count === 0)
-        {
-            comboBox.displayText = "-"
-            return
+            comboBox.listModel.append({name: counter.name, displayName: counter.displayName})
         }
 
         if (initName === "")
         {
-            comboBox.currentIndex = 0
-            //backend.name = model.get(0).name
+            comboBox.setIndex(0)
         }
         else
         {
             let index = -1
-            for (let i = 0; i < model.count; i++)
+            for (let i = 0; i < comboBox.listModel.count; i++)
             {
-                if (model.get(i).name === initName)
+                if (comboBox.listModel.get(i).name === initName)
                 {
                     index = i
                     break
                 }
             }
-            comboBox.currentIndex = index !== -1 ? index : 0
-            //backend.name = model.get(index).name
+            const currentIndex = index !== -1 ? index : 0
+            comboBox.setIndex(currentIndex)
         }
     }
 
@@ -83,84 +76,20 @@ Item {
                     color: Style.text
                 }
 
-                ComboBox {
+                CounterComboBox {
                     id: comboBox
-                    width: 150
-                    height: 30
-                    model: ListModel {
-                        id: model
-                    }
+                    anchors.verticalCenter: parent.verticalCenter
 
-                    delegate: ItemDelegate {
-                        width: comboBox.width
-                        height: comboBox.height
-                        contentItem: Text {
-                            text: displayName
-                            color: Style.text
-                            verticalAlignment: Text.AlignVCenter
-                        }
-                        background: Rectangle {
-                            color: parent.highlighted ? Style.secondary : "transparent"
-                            radius: 10
-                        }
+                    onIndexChanged: () =>
+                                    {
+                                        backend.name = comboBox.listModel.get(comboBox.currentIndex).name
+                                        backend.updateChart(chart)
 
-                        highlighted: comboBox.highlightedIndex === index
-                    }
-
-                    contentItem: Text {
-                        leftPadding: 10
-                        rightPadding: comboBox.indicator.width + comboBox.spacing
-
-                        text: comboBox.displayText
-                        font: comboBox.font
-                        color: comboBox.pressed ? Style.secondaryLight : Style.text
-                        verticalAlignment: Text.AlignVCenter
-                        elide: Text.ElideRight
-                    }
-
-                    background: Rectangle {
-                        implicitWidth: 120
-                        implicitHeight: 40
-                        color: Style.primaryDark
-                        border.color: comboBox.pressed ? Style.secondaryLight : Style.primaryLight
-                        border.width: comboBox.visualFocus ? 2 : 1
-                        radius: 10
-                    }
-
-                    popup: Popup {
-                        y: comboBox.height - 1
-                        width: comboBox.width
-                        implicitHeight: contentItem.implicitHeight
-                        padding: 1
-
-                        contentItem: ListView {
-                            clip: true
-                            implicitHeight: contentHeight
-                            model: comboBox.popup.visible ? comboBox.delegateModel : null
-                            currentIndex: comboBox.highlightedIndex
-
-                            ScrollIndicator.vertical: ScrollIndicator { }
-                        }
-
-                        background: Rectangle {
-                            color: Style.primaryDark
-                            border.color: Style.primaryLight
-                            radius: 10
-                        }
-                    }
-
-                    onCurrentIndexChanged: () =>
-                                           {
-                                               displayText = model.count > 0 ? displayText = model.get(currentIndex).displayName : "-"
-                                               if (model.count === 0) return
-                                               backend.name = model.get(currentIndex).name
-                                               backend.updateChart(chart)
-
-                                               weekButton.enabled = backend.isRangeAllowed(StatsBackend.CHART_RANGE_WEEK)
-                                               monthButton.enabled = backend.isRangeAllowed(StatsBackend.CHART_RANGE_MONTH)
-                                               yearButton.enabled = backend.isRangeAllowed(StatsBackend.CHART_RANGE_YEAR)
-                                               updateRanges()
-                                           }
+                                        weekButton.enabled = backend.isRangeAllowed(StatsBackend.CHART_RANGE_WEEK)
+                                        monthButton.enabled = backend.isRangeAllowed(StatsBackend.CHART_RANGE_MONTH)
+                                        yearButton.enabled = backend.isRangeAllowed(StatsBackend.CHART_RANGE_YEAR)
+                                        updateRanges()
+                                    }
                 }
             }
 
@@ -356,11 +285,3 @@ Item {
         }
     }
 }
-
-
-
-/*##^##
-Designer {
-    D{i:0;autoSize:true;height:480;width:300}
-}
-##^##*/

@@ -6,14 +6,7 @@
 #include <QtCharts>
 #include <QSettings>
 
-#define STYLE_TEXT 0xfafafa
-#define STYLE_PRIMARY_LIGHT 0x4f5b62
-#define STYLE_SECONDARY 0x03a9f4
-#define STYLE_SECONDARY_LIGHT 0x67daff
-#define STYLE_SECONDARY_DARK 0x007ac1
-
-#define DATA_TIME_DATA "timeData"
-#define DATA_TIMESTAMP "timestamp"
+#include "Global.h"
 
 class Stats : public QObject
 {
@@ -45,7 +38,7 @@ public:
     Q_INVOKABLE void setRangePointIndex(const int index) { _rangePointIndex = index; };
     
 private:
-    QSettings _settings = QSettings("WhenInDoubtC4", "ApologyCounter");
+	QSettings _settings;
     QString _name;
 	QMap<chartRange, bool> _chartRangeAllowed
     {

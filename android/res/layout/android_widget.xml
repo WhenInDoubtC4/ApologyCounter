@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/android_widget"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/android_widget_background_rect"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/android_widget_rect" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/android_widget_name1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NAME"
+            android:textColor="#fafafa"
+            android:textSize="13dp" />
+
+        <TextView
+            android:id="@+id/android_widget_count1"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="#03a9f4"
+            android:textSize="24dp" />
+
+        <Button
+            android:id="@+id/android_widget_increment1"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:width="32dp"
+            android:height="32dp"
+            android:background="@drawable/android_widget_increment_button_background"
+            android:text="+"
+            android:textColor="#fafafa" />
+    </RelativeLayout>
+</RelativeLayout>

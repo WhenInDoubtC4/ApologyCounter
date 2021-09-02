@@ -9,10 +9,10 @@ CounterManager::CounterManager(QObject* parent) : QObject(parent)
 #elif defined(Q_OS_ANDROID)
 	QObject::connect(AndroidUtils::getInstance(), &AndroidUtils::createNewCounter, this, &CounterManager::createNewCounter);
 #endif
-    
+
 	//Load from settings
 	//Load names
-	int counterCount = _settings.beginReadArray(DATA_ARRAY);
+	const int counterCount = _settings.beginReadArray(DATA_ARRAY);
 	QList<QString> names;
 	for (int i = 0; i < counterCount; i++)
 	{
@@ -68,6 +68,7 @@ void CounterManager::updateSettings()
 		_settings.setValue(DATA_NAME, _counters[i].name);
 	}
 	_settings.endArray();
+	_settings.sync();
 
 	//Write data for all new counters
 	for (const counterData& data : qAsConst(_counters))
@@ -83,6 +84,8 @@ void CounterManager::updateSettings()
 		_settings.setValue(DATA_COUNT, data.count);
 		_settings.endGroup();
 	}
+
+	_settings.sync();
 }
 
 void CounterManager::createNewCounter(QString name)
@@ -125,22 +128,22 @@ void CounterManager::clearSettingsForCounter(const QString &name)
 
 void CounterManager::swap(const int index1, const int index2)
 {
-    int arraySize = _settings.beginReadArray(DATA_ARRAY);
+	int arraySize = _settings.beginReadArray(DATA_ARRAY);
     QList<QString> names;
     for (int i = 0; i < arraySize; i++)
     {
         _settings.setArrayIndex(i);
         names << _settings.value(DATA_NAME).toString();
     }
-    _settings.endArray();
+	_settings.endArray();
     
-    names.swapItemsAt(index1, index2);
-    
-    _settings.beginWriteArray(DATA_ARRAY);
+	_settings.beginWriteArray(DATA_ARRAY);
     for (int i = 0; i < names.size(); i++)
     {
         _settings.setArrayIndex(i);
         _settings.setValue(DATA_NAME, names[i]);
     }
-    _settings.endArray();
+	_settings.endArray();
+
+	_settings.sync();
 }
