@@ -4,16 +4,21 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.appwidget.AppWidgetManager;
-import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.text.Html;
 import android.text.InputType;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.RemoteViews;
+
+import java.io.File;
 
 public class AndroidUtils
 {
@@ -24,6 +29,7 @@ public class AndroidUtils
     public static native String getWidgetDisplayName(int index);
     public static native int getCountForName(String name);
     public static native void incrementCounter(String name);
+    public static native void updateWidgetChart();
 
     @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public void displayNewCounterMessageBox(Activity activity)

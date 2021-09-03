@@ -2,9 +2,13 @@
 
 #include <QDebug>
 
-Stats::Stats(QObject* parent) : QObject(parent)
+Stats::Stats(QObject* parent, bool widget) : QObject(parent)
 {
-    
+#ifdef Q_OS_ANDROID
+	if (!widget) return;
+	QObject::connect(AndroidUtils::getInstance(), &AndroidUtils::setStatsName, this, &Stats::setName, Qt::QueuedConnection);
+	QObject::connect(AndroidUtils::getInstance(), &AndroidUtils::saveWidgetChart, this, &Stats::saveWidgetChart, Qt::QueuedConnection);
+#endif
 }
  
 void Stats::updateChart(QQuickItem* chartView)
@@ -51,7 +55,7 @@ void Stats::updateChart(QQuickItem* chartView)
     
     if (_rangeData[_chartRangeSelected].isEmpty()) return;
     const QList<int> frequency = _rangeData[_chartRangeSelected][_rangePointIndex].values();
-    int max = 0;
+	int max = 1;
     for (const int n : frequency)
     {
         *set << float(n) - lineThickness;
@@ -257,4 +261,99 @@ QVariant Stats::getRangePoints()
         rangePoints << point;
     }
     return rangePoints;
+}
+
+void Stats::saveWidgetChart(const QString& fileName)
+{
+	updateChartRanges();
+
+	if (!_chartRangeAllowed[Stats::chartRange::CHART_RANGE_WEEK]) return;
+
+	auto chart = new QChart();
+	auto series = new QBarSeries();
+	auto set = new QBarSet(_name);
+	chart->setAnimationOptions(QChart::AnimationOption::NoAnimation);
+
+	const QList<int> frequency = _rangeData[Stats::chartRange::CHART_RANGE_WEEK][0].values();
+	const QDate startDate = _rangeData[Stats::chartRange::CHART_RANGE_WEEK][0].keys().first();
+	const QDate endDate =  _rangeData[Stats::chartRange::CHART_RANGE_WEEK][0].keys().last();
+
+	const float lineRadius = 4.f;
+	const float lineThickness = lineRadius / 128.f;
+
+	int max = 1;
+	for (const int n : frequency)
+	{
+		*set << n - lineThickness;
+		if (n > max) max = n;
+	}
+	//Round up to even number (or a factor of 5)
+	if (max % 2 != 0 && max % 5 != 0) max += 1;
+
+	series->append(set);
+	chart->addSeries(series);
+
+	QLinearGradient gradient(0, 0, 0, 300);
+	gradient.setColorAt(0.f, STYLE_SECONDARY_LIGHT);
+	gradient.setColorAt(0.5f, STYLE_SECONDARY);
+	gradient.setColorAt(1.f, STYLE_SECONDARY_DARK);
+	QBrush barSetBrush(gradient);
+	set->setBrush(barSetBrush);
+
+	QPen pen(barSetBrush, lineRadius);
+	pen.setJoinStyle(Qt::RoundJoin);
+	pen.setCapStyle(Qt::RoundCap);
+	set->setPen(pen);
+
+	QPen horAxisGridLinePen(STYLE_PRIMARY_LIGHT);
+	horAxisGridLinePen.setWidthF(1.f);
+	horAxisGridLinePen.setStyle(Qt::DashLine);
+
+	auto horAxis = new QDateTimeAxis();
+	horAxis->setMin(startDate.startOfDay());
+	horAxis->setMax(endDate.startOfDay());
+	horAxis->setFormat("d");
+	horAxis->setTickCount(2);
+	horAxis->setGridLinePen(horAxisGridLinePen);
+	horAxis->setLabelsColor(STYLE_TEXT);
+	QFont horAxisFont = horAxis->labelsFont();
+	horAxisFont.setPixelSize(13);
+	horAxis->setLabelsFont(horAxisFont);
+	chart->addAxis(horAxis, Qt::AlignBottom);
+
+	QPen vertAxisGridLinePen(STYLE_PRIMARY_LIGHT);
+	vertAxisGridLinePen.setWidthF(1.f);
+	vertAxisGridLinePen.setStyle(Qt::DotLine);
+
+	const int interval = qCeil(float(max) / 6.f);
+	auto vertAxis = new QValueAxis();
+	vertAxis->setMin(0);
+	vertAxis->setMax(max);
+	vertAxis->setLabelFormat("%i");
+	vertAxis->setTickInterval(interval);
+	vertAxis->setTickAnchor(0);
+	vertAxis->setTickType(QValueAxis::TicksDynamic);
+	vertAxis->setGridLinePen(vertAxisGridLinePen);
+	vertAxis->setLabelsColor(STYLE_TEXT);
+	QFont vertAxisFont = vertAxis->labelsFont();
+	vertAxisFont.setPixelSize(13);
+	vertAxis->setLabelsFont(vertAxisFont);
+	chart->addAxis(vertAxis, Qt::AlignLeft);
+	series->attachAxis(vertAxis);
+
+	chart->legend()->hide();
+	chart->setBackgroundVisible(true);
+	chart->setBackgroundBrush(QBrush(STYLE_PRIMARY_DARK));
+	chart->setBackgroundRoundness(0);
+	chart->setMargins(QMargins(0,0,0,0));
+
+	auto chartView = new QChartView();
+	chartView->setChart(chart);
+	chartView->setBackgroundBrush(QBrush(STYLE_PRIMARY_DARK));
+	chartView->setRenderHint(QPainter::Antialiasing);
+	chartView->resize(256, 256);
+
+	QPixmap image(chartView->size());
+	static_cast<QWidget*>(chartView)->render(&image);
+	image.save(fileName);
 }

@@ -61,8 +61,10 @@ void Counter::incrementCount()
     _settings.endGroup();
 	_settings.sync();
     
-#ifdef Q_OS_IOS
+#if defined(Q_OS_IOS)
 	IOSUtils::playImpactHapticFeedback(IOSUtils::ImpactFeedbackStyle::MEDIUM);
+#elif defined(Q_OS_ANDROID)
+	AndroidUtils::getInstance()->requestUpdateWidget();
 #endif
 }
 
@@ -81,8 +83,10 @@ void Counter::decrementCount(bool single)
     _settings.endGroup();
 	_settings.sync();
 
-#ifdef Q_OS_IOS
+#if defined(Q_OS_IOS)
 	IOSUtils::playNotificationHapticFeedback(IOSUtils::NotificationFeedbackType::WARNING);
+#elif defined(Q_OS_ANDROID)
+	AndroidUtils::getInstance()->requestUpdateWidget();
 #endif
 }
 

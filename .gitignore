@@ -15,5 +15,6 @@ qrc_qml.cpp
 *.properties
 *.mak
 *.xcuserstate
+*.autosave
 
 IOSWidget/

@@ -32,10 +32,14 @@ private:
 	static jstring getWidgetDisplayName(JNIEnv* env, jobject obj, jint index);
 	static jint getCountForName(JNIEnv* env, jobject obj, jstring name);
 	static void incrementCounter(JNIEnv* env, jobject obj, jstring name);
+	static void updateWidgetChart(JNIEnv* env, jobject obj);
 
 signals:
 	void createNewCounter(QString name);
 	void deleteCounter();
 	void requestIncrementCounter(const QString name);
+
+	void setStatsName(const QString& name);
+	void saveWidgetChart(const QString& path);
 };
 

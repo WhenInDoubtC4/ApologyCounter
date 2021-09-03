@@ -12,7 +12,8 @@ AndroidUtils::AndroidUtils()
 		{"getWidgetName", "(I)Ljava/lang/String;", reinterpret_cast<jstring*>(getWidgetName)},
 		{"getWidgetDisplayName", "(I)Ljava/lang/String;", reinterpret_cast<jstring*>(getWidgetDisplayName)},
 		{"getCountForName", "(Ljava/lang/String;)I", reinterpret_cast<jint*>(getCountForName)},
-		{"incrementCounter", "(Ljava/lang/String;)V", reinterpret_cast<void*>(incrementCounter)}
+		{"incrementCounter", "(Ljava/lang/String;)V", reinterpret_cast<void*>(incrementCounter)},
+		{"updateWidgetChart", "()V", reinterpret_cast<void*>(updateWidgetChart)}
 	};
 
 	QAndroidJniEnvironment env;
@@ -97,4 +98,15 @@ void AndroidUtils::incrementCounter(JNIEnv* env, [[maybe_unused]] jobject obj, j
 	settings.endArray();
 	settings.endGroup();
 	settings.sync();
+}
+
+void AndroidUtils::updateWidgetChart([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jobject obj)
+{
+	const QString filePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
+	emit getInstance()->setStatsName(Settings::getWidgetName(0));
+	emit getInstance()->saveWidgetChart(filePath + "/chart0.png");
+
+	emit getInstance()->setStatsName(Settings::getWidgetName(1));
+	emit getInstance()->saveWidgetChart(filePath + "/chart1.png");
 }

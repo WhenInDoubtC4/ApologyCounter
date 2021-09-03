@@ -82,7 +82,7 @@ Item {
 
                     onIndexChanged: () =>
                                     {
-                                        backend.name = comboBox.listModel.get(comboBox.currentIndex).name
+                                        backend.name = comboBox.listModel.get(comboBox.getIndex()).name
                                         backend.updateChart(chart)
 
                                         weekButton.enabled = backend.isRangeAllowed(StatsBackend.CHART_RANGE_WEEK)

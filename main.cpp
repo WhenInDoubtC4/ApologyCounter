@@ -39,5 +39,9 @@ int main(int argc, char *argv[])
 	}, Qt::QueuedConnection);
 	engine.load(url);
 
+#ifdef Q_OS_ANDROID
+	Stats widgetStats(nullptr, true);
+#endif
+
 	return app.exec();
 }
