@@ -3,12 +3,15 @@
 #include <QQmlApplicationEngine>
 #include <QSettings>
 
+#include "Global.h"
+
 #include "Counter.h"
 #include "CounterManager.h"
 #include "Stats.h"
 #include "Settings.h"
+#include "Style.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -16,8 +19,8 @@ int main(int argc, char *argv[])
 
 	QApplication app(argc, argv);
 
-	QApplication::setApplicationName("ApologyCounter");
-	QApplication::setOrganizationName("WhenInDoubtC4");
+	QApplication::setApplicationName(SETTINGS_APP_NAME);
+	QApplication::setOrganizationName(SETTINGS_ORGANIZATION_NAME);
 
 #ifdef Q_OS_ANDROID
 	QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation));
@@ -29,6 +32,7 @@ int main(int argc, char *argv[])
 	qmlRegisterType<CounterManager>("counterManager", 1, 0, "CounterManager");
 	qmlRegisterType<Stats>("stats", 1, 0, "StatsBackend");
 	qmlRegisterType<Settings>("settings", 1, 0, "SettingsBacked");
+	qmlRegisterSingletonType<Style>("styleBackend", 1, 0, "StyleBackend", &Style::getQMLInstance);
 
 	QQmlApplicationEngine engine;
 	const QUrl url(QStringLiteral("qrc:/main.qml"));

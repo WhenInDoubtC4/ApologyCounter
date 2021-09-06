@@ -8,8 +8,6 @@
 #include <UIKit/UITextField.h>
 #include <UIKit/NSAttributedString.h>
 
-#include <QDebug>
-
 IOSUtils::IOSUtils()
 {
 

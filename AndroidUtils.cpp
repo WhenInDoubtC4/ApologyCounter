@@ -1,7 +1,5 @@
 #include "AndroidUtils.h"
 
-#include <QDebug>
-
 AndroidUtils::AndroidUtils()
 {
 	JNINativeMethod methods[]
@@ -13,7 +11,9 @@ AndroidUtils::AndroidUtils()
 		{"getWidgetDisplayName", "(I)Ljava/lang/String;", reinterpret_cast<jstring*>(getWidgetDisplayName)},
 		{"getCountForName", "(Ljava/lang/String;)I", reinterpret_cast<jint*>(getCountForName)},
 		{"incrementCounter", "(Ljava/lang/String;)V", reinterpret_cast<void*>(incrementCounter)},
-		{"updateWidgetChart", "()V", reinterpret_cast<void*>(updateWidgetChart)}
+		{"updateWidgetChart", "()V", reinterpret_cast<void*>(updateWidgetChart)},
+		{"getStyleIndex", "()I", reinterpret_cast<jint*>(getStyleIndex)},
+		{"getSecondaryColorHex", "()Ljava/lang/String;", reinterpret_cast<jstring*>(getSecondaryColorHex)}
 	};
 
 	QAndroidJniEnvironment env;
@@ -109,4 +109,16 @@ void AndroidUtils::updateWidgetChart([[maybe_unused]] JNIEnv* env, [[maybe_unuse
 
 	emit getInstance()->setStatsName(Settings::getWidgetName(1));
 	emit getInstance()->saveWidgetChart(filePath + "/chart1.png");
+}
+
+jint AndroidUtils::getStyleIndex([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jobject obj)
+ {
+	const int index = Style::getIndex();
+	return static_cast<jint>(index);
+ }
+
+jstring AndroidUtils::getSecondaryColorHex(JNIEnv* env, [[maybe_unused]] jobject obj)
+{
+	const QString hex = Style::getSecondaryColor().name();
+	return env->NewStringUTF(hex.toUtf8());
 }

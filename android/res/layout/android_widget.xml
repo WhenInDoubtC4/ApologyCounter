@@ -42,11 +42,7 @@
                     android:fontFamily="monospace"
                     android:text="0"
                     android:textColor="#03a9f4"
-                    android:textSize="24dp"
-                    android:shadowColor="#67daff"
-                    android:shadowDx="0.0"
-                    android:shadowDy="0.0"
-                    android:shadowRadius="10"/>
+                    android:textSize="24dp" />
                 <Button
                     android:id="@+id/android_widget_increment1"
                     android:layout_width="32dp"
@@ -55,7 +51,7 @@
                     android:layout_alignParentBottom="true"
                     android:width="32dp"
                     android:height="32dp"
-                    android:background="@drawable/android_widget_increment_button_background"
+                    android:background="@drawable/android_widget_increment_button_backg_blue"
                     android:text="+"
                     android:textColor="#fafafa" />
             </RelativeLayout>
@@ -85,11 +81,7 @@
                     android:fontFamily="monospace"
                     android:text="0"
                     android:textColor="#03a9f4"
-                    android:textSize="24dp"
-                    android:shadowColor="#67daff"
-                    android:shadowDx="0.0"
-                    android:shadowDy="0.0"
-                    android:shadowRadius="10"/>
+                    android:textSize="24dp" />
 
                 <Button
                     android:id="@+id/android_widget_increment2"
@@ -99,7 +91,7 @@
                     android:layout_alignParentBottom="true"
                     android:width="32dp"
                     android:height="32dp"
-                    android:background="@drawable/android_widget_increment_button_background"
+                    android:background="@drawable/android_widget_increment_button_backg_blue"
                     android:text="+"
                     android:textColor="#fafafa" />
 

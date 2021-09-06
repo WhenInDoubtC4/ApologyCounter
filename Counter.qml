@@ -5,6 +5,7 @@ import QtQuick.Dialogs 1.2
 
 import style 1.0
 import counter 1.0
+import styleBackend 1.0
 
  Item {
     CounterBackend {
@@ -22,9 +23,9 @@ import counter 1.0
 
     signal moveUp()
     signal moveDown()
+    signal showStats()
 
-    function requestDeleteCounter()
-    {
+    function requestDeleteCounter() {
         backend.displayDeleteCounterMessageBox(displayName, name)
     }
 
@@ -71,13 +72,12 @@ import counter 1.0
                         width: 80
                         font.pixelSize: 13
                         font.bold: true
-                        palette.button: Style.secondary
+                        palette.button: StyleBackend.getSecondaryColor()
                         palette.buttonText: Style.destructive
-                        onPressed: () =>
-                                   {
-                                       backend.deleteCounter()
-                                       dialog.close()
-                                   }
+                        onPressed: {
+                            backend.deleteCounter()
+                            dialog.close()
+                        }
                     }
                     RoundButton {
                         id: cancelButton
@@ -85,20 +85,18 @@ import counter 1.0
                         height: 30
                         width: 80
                         font.pixelSize: 13
-                        palette.button: Style.secondary
+                        palette.button: StyleBackend.getSecondaryColor()
                         palette.buttonText: Style.text
-                        onPressed: () =>
-                                   {
-                                       dialog.close()
-                                   }
+                        onPressed: {
+                            dialog.close()
+                        }
                     }
                 }
             }
         }
         Connections {
             target: backend
-            function onDisplayDeleteCounterDialog()
-            {
+            function onDisplayDeleteCounterDialog() {
                 dialog.open()
             }
         }
@@ -123,10 +121,9 @@ import counter 1.0
 
             anchors.verticalCenter: parent.verticalCenter
             bottomPadding: 15
-            onClicked: () =>
-                       {
-                           menu.open()
-                       }
+            onClicked: {
+                menu.open()
+            }
 
             Menu {
                 id: menu
@@ -134,7 +131,6 @@ import counter 1.0
                 background: Rectangle {
                     id: menuBackgroundRect
                     implicitWidth: 150
-                    //implicitHeight: 200
                     color: Style.primaryDark
                     radius: 10
                     border.width: 1
@@ -163,10 +159,7 @@ import counter 1.0
                         color: decrementMenuItem.isPressed || decrementMenuItem.highlighted ? Style.secondary : "transparent"
                         radius: 10
                     }
-                    onPressedChanged: () =>
-                                      {
-                                          decrementMenuItem.isPressed = !decrementMenuItem.isPressed
-                                      }
+                    onPressedChanged: decrementMenuItem.isPressed = !decrementMenuItem.isPressed
                     onPressed: backend.decrementCount(true)
                 }
                 MenuItem {
@@ -187,13 +180,13 @@ import counter 1.0
                         color: Style.text
                     }
                     background: Rectangle {
-                        color: showStatsMenuItem.isPressed || showStatsMenuItem.highlighted ? Style.secondary : "transparent"
+                        color: showStatsMenuItem.isPressed || showStatsMenuItem.highlighted ? StyleBackend.getSecondaryColor() : "transparent"
                         radius: 10
                     }
-                    onPressedChanged: () =>
-                                      {
-                                          showStatsMenuItem.isPressed = !showStatsMenuItem.isPressed
-                                      }
+                    onPressedChanged: {
+                        showStatsMenuItem.isPressed = !showStatsMenuItem.isPressed
+                    }
+                    onPressed: showStats()
                 }
                 MenuItem {
                     id: moveUpMenuItem
@@ -213,18 +206,14 @@ import counter 1.0
                         color: Style.text
                     }
                     background: Rectangle {
-                        color: moveUpMenuItem.isPressed || moveUpMenuItem.highlighted ? Style.secondary : "transparent"
+                        color: moveUpMenuItem.isPressed || moveUpMenuItem.highlighted ? StyleBackend.getSecondaryColor() : "transparent"
                         radius: 10
                     }
-                    onPressedChanged: () =>
-                                      {
-                                          moveUpMenuItem.isPressed = !moveUpMenuItem.isPressed
-                                      }
-                    onPressed: () =>
-                               {
-                                   menu.close()
-                                   root.moveUp()
-                               }
+                    onPressedChanged: moveUpMenuItem.isPressed = !moveUpMenuItem.isPressed
+                    onPressed: {
+                        menu.close()
+                        root.moveUp()
+                    }
                 }
                 MenuItem {
                     id: moveDownMenuItem
@@ -244,18 +233,14 @@ import counter 1.0
                         color: Style.text
                     }
                     background: Rectangle {
-                        color: moveDownMenuItem.isPressed || moveDownMenuItem.highlighted ? Style.secondary : "transparent"
+                        color: moveDownMenuItem.isPressed || moveDownMenuItem.highlighted ? StyleBackend.getSecondaryColor() : "transparent"
                         radius: 10
                     }
-                    onPressedChanged: () =>
-                                      {
-                                          moveDownMenuItem.isPressed = !moveDownMenuItem.isPressed
-                                      }
-                    onPressed: () =>
-                               {
-                                   menu.close()
-                                   root.moveDown()
-                               }
+                    onPressedChanged: moveDownMenuItem.isPressed = !moveDownMenuItem.isPressed
+                    onPressed: {
+                        menu.close()
+                        root.moveDown()
+                    }
                 }
                 MenuItem {
                     id: deleteMenuItem
@@ -276,18 +261,14 @@ import counter 1.0
                         font.bold: true
                     }
                     background: Rectangle {
-                        color: deleteMenuItem.isPressed || deleteMenuItem.highlighted ? Style.secondary : "transparent"
+                        color: deleteMenuItem.isPressed || deleteMenuItem.highlighted ? StyleBackend.getSecondaryColor() : "transparent"
                         radius: 10
                     }
-                    onPressedChanged: () =>
-                                      {
-                                          deleteMenuItem.isPressed = !deleteMenuItem.isPressed
-                                      }
-                    onPressed: () =>
-                               {
-                                   requestDeleteCounter()
-                                   menu.close()
-                               }
+                    onPressedChanged: deleteMenuItem.isPressed = !deleteMenuItem.isPressed
+                    onPressed: {
+                        requestDeleteCounter()
+                        menu.close()
+                    }
                 }
             }
         }
@@ -321,8 +302,8 @@ import counter 1.0
                 height: nameLabel.height + border.width
                 radius: 4
                 border.width: 4
-                border.color: Style.secondary
-                color: Style.secondary
+                border.color: StyleBackend.getSecondaryColor()
+                color: StyleBackend.getSecondaryColor()
 
                 Text {
                     id: nameLabel
@@ -370,7 +351,7 @@ import counter 1.0
             width: parent.width
             height: parent.height
             rightPadding: 6
-            color: Style.secondary
+            color: StyleBackend.getSecondaryColor()
             text: backend.count
             font.pixelSize: 24
             horizontalAlignment: Text.AlignRight
@@ -384,7 +365,7 @@ import counter 1.0
             id: countLabelGlow
             anchors.fill: countLabel
             source: countLabel
-            color: Style.secondaryLight
+            color: StyleBackend.getSecondaryLightColor()
             spread: 0.15
             radius: 10
             samples: 16
@@ -406,7 +387,7 @@ import counter 1.0
             icon.color: Style.text
             display: AbstractButton.IconOnly
             palette {
-                button: Style.secondaryDark
+                button: StyleBackend.getSecondaryDarkColor()
                 buttonText: Style.text
             }
 

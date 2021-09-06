@@ -4,6 +4,7 @@ import QtCharts 2.3
 import QtGraphicalEffects 1.0
 
 import stats 1.0
+import styleBackend 1.0
 
 Item {
     property string initName: ""
@@ -12,22 +13,17 @@ Item {
     function update()
     {
         comboBox.listModel.clear()
-        for (const counter of counters)
-        {
+        for (const counter of counters) {
             comboBox.listModel.append({name: counter.name, displayName: counter.displayName})
         }
 
-        if (initName === "")
-        {
+        if (initName === "") {
             comboBox.setIndex(0)
         }
-        else
-        {
+        else {
             let index = -1
-            for (let i = 0; i < comboBox.listModel.count; i++)
-            {
-                if (comboBox.listModel.get(i).name === initName)
-                {
+            for (let i = 0; i < comboBox.listModel.count; i++) {
+                if (comboBox.listModel.get(i).name === initName) {
                     index = i
                     break
                 }
@@ -40,8 +36,7 @@ Item {
     function updateRanges()
     {
         dataPointModel.clear()
-        for (const rangePoint of backend.getRangePoints())
-        {
+        for (const rangePoint of backend.getRangePoints()) {
             dataPointModel.append({start: rangePoint.start, end: rangePoint.end})
         }
         pointSelector.currentIndex = 0
@@ -80,16 +75,15 @@ Item {
                     id: comboBox
                     anchors.verticalCenter: parent.verticalCenter
 
-                    onIndexChanged: () =>
-                                    {
-                                        backend.name = comboBox.listModel.get(comboBox.getIndex()).name
-                                        backend.updateChart(chart)
+                    onIndexChanged: {
+                        backend.name = comboBox.listModel.get(comboBox.getIndex()).name
+                        backend.updateChart(chart)
 
-                                        weekButton.enabled = backend.isRangeAllowed(StatsBackend.CHART_RANGE_WEEK)
-                                        monthButton.enabled = backend.isRangeAllowed(StatsBackend.CHART_RANGE_MONTH)
-                                        yearButton.enabled = backend.isRangeAllowed(StatsBackend.CHART_RANGE_YEAR)
-                                        updateRanges()
-                                    }
+                        weekButton.enabled = backend.isRangeAllowed(StatsBackend.CHART_RANGE_WEEK)
+                        monthButton.enabled = backend.isRangeAllowed(StatsBackend.CHART_RANGE_MONTH)
+                        yearButton.enabled = backend.isRangeAllowed(StatsBackend.CHART_RANGE_YEAR)
+                        updateRanges()
+                    }
                 }
             }
 
@@ -112,16 +106,15 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                     }
                     background: Rectangle {
-                        color: parent.enabled ? (parent.checked ? Style.secondary : Style.primaryDark) : Style.primaryLight
+                        color: parent.enabled ? (parent.checked ? StyleBackend.getSecondaryColor() : Style.primaryDark) : Style.primaryLight
                         radius: 10
                     }
                     enabled: backend.isRangeAllowed(StatsBackend.CHART_RANGE_WEEK)
-                    onPressed: () =>
-                               {
-                                   backend.rangeSelected = StatsBackend.CHART_RANGE_WEEK
-                                   updateRanges()
-                                   backend.updateChart(chart)
-                               }
+                    onPressed: {
+                        backend.rangeSelected = StatsBackend.CHART_RANGE_WEEK
+                        updateRanges()
+                        backend.updateChart(chart)
+                    }
                 }
                 TabButton {
                     id: monthButton
@@ -135,16 +128,15 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                     }
                     background: Rectangle {
-                        color: parent.enabled ? (parent.checked ? Style.secondary : Style.primaryDark) : Style.primaryLight
+                        color: parent.enabled ? (parent.checked ? StyleBackend.getSecondaryColor() : Style.primaryDark) : Style.primaryLight
                         radius: 10
                     }
                     enabled: backend.isRangeAllowed(StatsBackend.CHART_RANGE_MONTH)
-                    onPressed: () =>
-                               {
-                                   backend.rangeSelected = StatsBackend.CHART_RANGE_MONTH
-                                   updateRanges()
-                                   backend.updateChart(chart)
-                               }
+                    onPressed: {
+                        backend.rangeSelected = StatsBackend.CHART_RANGE_MONTH
+                        updateRanges()
+                        backend.updateChart(chart)
+                    }
                 }
                 TabButton {
                     id: yearButton
@@ -158,16 +150,15 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                     }
                     background: Rectangle {
-                        color: parent.enabled ? (parent.checked ? Style.secondary : Style.primaryDark) : Style.primaryLight
+                        color: parent.enabled ? (parent.checked ? StyleBackend.getSecondaryColor() : Style.primaryDark) : Style.primaryLight
                         radius: 10
                     }
                     enabled: backend.isRangeAllowed(StatsBackend.CHART_RANGE_YEAR)
-                    onPressed: () =>
-                               {
-                                   backend.rangeSelected = StatsBackend.CHART_RANGE_YEAR
-                                   updateRanges()
-                                   backend.updateChart(chart)
-                               }
+                    onPressed: {
+                        backend.rangeSelected = StatsBackend.CHART_RANGE_YEAR
+                        updateRanges()
+                        backend.updateChart(chart)
+                    }
                 }
                 bottomPadding: 10
             }
@@ -202,15 +193,14 @@ Item {
                         radius: 10
                         color: parent.pressed ? Style.primaryLight : Style.primaryDark
                     }
-                    onPressed: () =>
-                               {
-                                   pointSelector.currentIndex += 1
-                                   rangeText.text = dataPointModel.get(pointSelector.currentIndex).start + "\n" + dataPointModel.get(pointSelector.currentIndex).end
-                                   prevPointButton.enabled = !(pointSelector.currentIndex === dataPointModel.count - 1)
-                                   nextPointButton.enabled = !(pointSelector.currentIndex === 0)
-                                   backend.setRangePointIndex(pointSelector.currentIndex)
-                                   backend.updateChart(chart)
-                               }
+                    onPressed: {
+                        pointSelector.currentIndex += 1
+                        rangeText.text = dataPointModel.get(pointSelector.currentIndex).start + "\n" + dataPointModel.get(pointSelector.currentIndex).end
+                        prevPointButton.enabled = !(pointSelector.currentIndex === dataPointModel.count - 1)
+                        nextPointButton.enabled = !(pointSelector.currentIndex === 0)
+                        backend.setRangePointIndex(pointSelector.currentIndex)
+                        backend.updateChart(chart)
+                    }
                 }
                 Row {
                     id: row1
@@ -245,15 +235,14 @@ Item {
                         radius: 10
                         color: parent.pressed ? Style.primaryLight : Style.primaryDark
                     }
-                    onPressed: () =>
-                               {
-                                   pointSelector.currentIndex -= 1
-                                   rangeText.text = dataPointModel.get(pointSelector.currentIndex).start + "\n" + dataPointModel.get(pointSelector.currentIndex).end
-                                   prevPointButton.enabled = !(pointSelector.currentIndex === dataPointModel.count - 1)
-                                   nextPointButton.enabled = !(pointSelector.currentIndex === 0)
-                                   backend.setRangePointIndex(pointSelector.currentIndex)
-                                   backend.updateChart(chart)
-                               }
+                    onPressed: {
+                        pointSelector.currentIndex -= 1
+                        rangeText.text = dataPointModel.get(pointSelector.currentIndex).start + "\n" + dataPointModel.get(pointSelector.currentIndex).end
+                        prevPointButton.enabled = !(pointSelector.currentIndex === dataPointModel.count - 1)
+                        nextPointButton.enabled = !(pointSelector.currentIndex === 0)
+                        backend.setRangePointIndex(pointSelector.currentIndex)
+                        backend.updateChart(chart)
+                    }
                 }
             }
 

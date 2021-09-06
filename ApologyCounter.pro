@@ -11,6 +11,7 @@ SOURCES += \
         CounterManager.cpp \
         Settings.cpp \
         Stats.cpp \
+        Style.cpp \
         main.cpp
 
 RESOURCES += qml.qrc
@@ -31,7 +32,8 @@ HEADERS += \
 	CounterManager.h \
 	Global.h \
 	Settings.h \
-	Stats.h
+	Stats.h \
+	Style.h
 
 ios {
 	OBJECTIVE_SOURCES += \

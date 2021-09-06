@@ -5,6 +5,7 @@
 
 #include "Global.h"
 #include "Settings.h"
+#include "Style.h"
 
 #define ANDROID_UTILS_CLASS_NAME "com/WhenInDoubtC4/ApologyCounter/AndroidUtils"
 
@@ -33,6 +34,8 @@ private:
 	static jint getCountForName(JNIEnv* env, jobject obj, jstring name);
 	static void incrementCounter(JNIEnv* env, jobject obj, jstring name);
 	static void updateWidgetChart(JNIEnv* env, jobject obj);
+	static jint getStyleIndex(JNIEnv* env, jobject obj);
+	static jstring getSecondaryColorHex(JNIEnv* env, jobject obj);
 
 signals:
 	void createNewCounter(QString name);

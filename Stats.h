@@ -7,6 +7,7 @@
 #include <QSettings>
 
 #include "Global.h"
+#include "Style.h"
 
 #ifdef Q_OS_ANDROID
 #include "AndroidUtils.h"
@@ -63,8 +64,5 @@ private:
 signals:
     void nameChanged();
     void rangeSelectedChanged();
-#ifdef Q_OS_ANDROID
-	void updateAndroidWidget(bool chart);
-#endif
 };
 

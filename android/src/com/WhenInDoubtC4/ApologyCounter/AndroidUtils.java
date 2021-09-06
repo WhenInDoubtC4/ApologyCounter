@@ -30,6 +30,8 @@ public class AndroidUtils
     public static native int getCountForName(String name);
     public static native void incrementCounter(String name);
     public static native void updateWidgetChart();
+    public static native int getStyleIndex();
+    public static native String getSecondaryColorHex();
 
     @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public void displayNewCounterMessageBox(Activity activity)

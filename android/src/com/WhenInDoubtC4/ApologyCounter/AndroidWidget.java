@@ -9,11 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import java.io.File;
 
@@ -88,6 +88,42 @@ public class AndroidWidget extends AppWidgetProvider
         views.setTextViewText(R.id.android_widget_name2, AndroidUtils.getWidgetDisplayName(1));
         views.setTextViewText(R.id.android_widget_count2, String.valueOf(AndroidUtils.getCountForName(AndroidUtils.getWidgetName(1))));
         views.setOnClickPendingIntent(R.id.android_widget_increment2, getPendingSelfIntent(context, ACTION_INCREMENT_2));
+
+        views.setTextColor(R.id.android_widget_count1, Color.parseColor(AndroidUtils.getSecondaryColorHex()));
+        views.setTextColor(R.id.android_widget_count2, Color.parseColor(AndroidUtils.getSecondaryColorHex()));
+
+        int styleIndex = AndroidUtils.getStyleIndex();
+        int buttonBackground = R.drawable.android_widget_increment_button_backg_blue;
+        switch (styleIndex)
+        {
+            case 0:
+                buttonBackground = R.drawable.android_widget_increment_button_backg_blue;
+                break;
+            case 1:
+                buttonBackground = R.drawable.android_widget_increment_button_backg_green;
+                break;
+            case 2:
+                buttonBackground = R.drawable.android_widget_increment_button_backg_purple;
+                break;
+            case 3:
+                buttonBackground = R.drawable.android_widget_increment_button_backg_pink;
+                break;
+            case 4:
+                buttonBackground = R.drawable.android_widget_increment_button_backg_red;
+                break;
+            case 5:
+                buttonBackground = R.drawable.android_widget_increment_button_backg_yellow;
+                break;
+            case 6:
+                buttonBackground = R.drawable.android_widget_increment_button_backg_orange;
+                break;
+            case  7:
+                buttonBackground = R.drawable.android_widget_increment_button_backg_grey;
+                break;
+        }
+
+        views.setInt(R.id.android_widget_increment1, "setBackgroundResource", buttonBackground);
+        views.setInt(R.id.android_widget_increment2, "setBackgroundResource", buttonBackground);
 
         AndroidUtils.updateWidgetChart();
         File chart0File = new File(context.getFilesDir().toString(), "chart0.png");

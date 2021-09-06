@@ -1,7 +1,5 @@
 #include "Stats.h"
 
-#include <QDebug>
-
 Stats::Stats(QObject* parent, bool widget) : QObject(parent)
 {
 #ifdef Q_OS_ANDROID
@@ -72,9 +70,9 @@ void Stats::updateChart(QQuickItem* chartView)
     chart->addSeries(series);
     
     QLinearGradient gradient(0, 0, 0, 300);
-    gradient.setColorAt(0.f, STYLE_SECONDARY_LIGHT);
-    gradient.setColorAt(0.5f, STYLE_SECONDARY);
-    gradient.setColorAt(1.f, STYLE_SECONDARY_DARK);
+	gradient.setColorAt(0.f, Style::getSecondaryLightColor());
+	gradient.setColorAt(0.5f, Style::getSecondaryColor());
+	gradient.setColorAt(1.f, Style::getSecondaryDarkColor());
     QBrush barSetBrush(gradient);
     set->setBrush(barSetBrush);
     
@@ -294,9 +292,9 @@ void Stats::saveWidgetChart(const QString& fileName)
 	chart->addSeries(series);
 
 	QLinearGradient gradient(0, 0, 0, 300);
-	gradient.setColorAt(0.f, STYLE_SECONDARY_LIGHT);
-	gradient.setColorAt(0.5f, STYLE_SECONDARY);
-	gradient.setColorAt(1.f, STYLE_SECONDARY_DARK);
+	gradient.setColorAt(0.f, Style::getSecondaryLightColor());
+	gradient.setColorAt(0.5f, Style::getSecondaryColor());
+	gradient.setColorAt(1.f, Style::getSecondaryDarkColor());
 	QBrush barSetBrush(gradient);
 	set->setBrush(barSetBrush);
 

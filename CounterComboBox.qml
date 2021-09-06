@@ -1,6 +1,8 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 
+import styleBackend 1.0
+
 Item {
     id: root
     width: 150
@@ -9,13 +11,11 @@ Item {
         id: model
     }
 
-    function setIndex(index)
-    {
+    function setIndex(index) {
         comboBox.currentIndex = index
     }
 
-    function getIndex()
-    {
+    function getIndex() {
         return comboBox.currentIndex
     }
 
@@ -37,7 +37,7 @@ Item {
                 verticalAlignment: Text.AlignVCenter
             }
             background: Rectangle {
-                color: parent.highlighted ? Style.secondary : "transparent"
+                color: parent.highlighted ? StyleBackend.getSecondaryColor() : "transparent"
                 radius: 10
             }
 
@@ -45,12 +45,13 @@ Item {
         }
 
         contentItem: Text {
+            id: label
             leftPadding: 10
             rightPadding: comboBox.indicator.width + comboBox.spacing
 
             text: model.count > 0 ? comboBox.displayText : "-"
             font: comboBox.font
-            color: comboBox.pressed ? Style.secondaryLight : Style.text
+            color: comboBox.pressed ? StyleBackend.getSecondaryLightColor() : Style.text
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
         }
@@ -59,7 +60,7 @@ Item {
             implicitWidth: 120
             implicitHeight: 40
             color: Style.primaryDark
-            border.color: comboBox.pressed ? Style.secondaryLight : Style.primaryLight
+            border.color: comboBox.pressed ? StyleBackend.getSecondaryLightColor() : Style.primaryLight
             border.width: comboBox.visualFocus ? 2 : 1
             radius: 10
         }
@@ -86,16 +87,11 @@ Item {
             }
         }
 
-        Component.onCompleted: () =>
-                               {
-                                   //if (listModel.count > 0) comboBox.currentIndex = 0
-                               }
-
-        onCurrentIndexChanged: () =>
-                               {
-                                   displayText = listModel.count > 0 ? displayText = listModel.get(currentIndex).displayName : "-"
-                                   if (listModel.count === 0) return
-                                   indexChanged()
-                               }
+        onCurrentIndexChanged: {
+            displayText = listModel.count > 0 ? displayText = listModel.get(currentIndex).displayName : "-"
+            label.text = displayText
+            if (listModel.count === 0) return
+            indexChanged()
+        }
     }
 }

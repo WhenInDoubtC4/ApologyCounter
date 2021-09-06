@@ -6,27 +6,25 @@ import QtGraphicalEffects 1.0
 
 import style 1.0
 import counterManager 1.0
+import styleBackend 1.0
 
 Window {
     readonly property int menuHeight: 50
 
-    function findCounterIndex(name: string)
-    {
-        for (let i = 0; i < listModel.count; i++)
-        {
+    function findCounterIndex(name: string) {
+        for (let i = 0; i < listModel.count; i++) {
             if (listModel.get(i).n === name) return i;
         }
         return -1;
     }
 
-    function updateStats()
-    {
+    function updateStats() {
         statsPage.counters = backend.getCounters()
     }
 
     id: root
-    width: 640
-    height: 480
+    width: 450
+    height: 800
     visible: true
     title: "Apology Counter"
     color: Style.primary
@@ -35,16 +33,12 @@ Window {
         id: backend
     }
 
-    Component.onCompleted: () =>
-                           {
-                               console.log("ON COMPLETED CALLED")
-                               for (const counterData of backend.getCounters())
-                               {
-                                   listModel.append({dispName: counterData.displayName, n: counterData.name})
-                               }
-                               console.log(backend.getCounters())
-                               updateStats()
-                           }
+    Component.onCompleted: {
+        for (const counterData of backend.getCounters()) {
+            listModel.append({dispName: counterData.displayName, n: counterData.name})
+        }
+        updateStats()
+    }
 
     Dialog {
         id: dialog
@@ -79,7 +73,7 @@ Window {
                         color: Style.primaryLight
                         radius: parent.height / 2
                         border.width: parent.activeFocus ? 1 : 0
-                        border.color: Style.secondaryLight
+                        border.color: StyleBackend.getSecondaryLightColor()
                     }
                 }
                 Row {
@@ -97,13 +91,12 @@ Window {
                         height: 30
                         width: 80
                         font.pixelSize: 13
-                        palette.button: Style.secondary
+                        palette.button: StyleBackend.getSecondaryColor()
                         palette.buttonText: Style.text
-                        onPressed: () =>
-                                   {
-                                       backend.createNewCounter(dialogTextField.text)
-                                       dialog.close()
-                                   }
+                        onPressed: {
+                            backend.createNewCounter(dialogTextField.text)
+                            dialog.close()
+                        }
                     }
                     RoundButton {
                         id: cancelButton
@@ -111,12 +104,9 @@ Window {
                         height: 30
                         width: 80
                         font.pixelSize: 13
-                        palette.button: Style.secondary
+                        palette.button: StyleBackend.getSecondaryColor()
                         palette.buttonText: Style.text
-                        onPressed: () =>
-                                   {
-                                       dialog.close()
-                                   }
+                        onPressed: dialog.close()
                     }
                 }
             }
@@ -153,11 +143,14 @@ Window {
                     width: parent.width
                     displayName: dispName
                     name: n
+                    onShowStats: {
+                        statsPage.initName = n
+                        swipeView.setCurrentIndex(2)
+                    }
 
                     Connections {
                         target: ct.counterBackend
-                        function onDeleteQmlCounter(name: string)
-                        {
+                        function onDeleteQmlCounter(name: string) {
                             listModel.remove(findCounterIndex(name))
                             backend.clearSettingsForCounter(name)
                             updateStats()
@@ -165,16 +158,14 @@ Window {
                     }
                     Connections {
                         target: ct
-                        function onMoveDown()
-                        {
+                        function onMoveDown() {
                             //Check if last one
                             let index = findCounterIndex(n)
                             if (index === listModel.count - 1) return
                             listModel.move(index, index + 1, 1)
                             backend.swap(index, index + 1)
                         }
-                        function onMoveUp()
-                        {
+                        function onMoveUp() {
                             //Check if first one
                             let index = findCounterIndex(n)
                             if (index === 0) return
@@ -239,22 +230,20 @@ Window {
                     }
                 }
 
-                swipe.onCompleted: () =>
-                                   {
-                                       //Left (delete)
-                                       if (swipe.position === 1)
-                                       {
-                                           ct.requestDeleteCounter()
-                                           swipe.close()
-                                       }
-                                       //Right (stats)
-                                       else if (swipe.position === -1)
-                                       {
-                                           swipe.close()
-                                           statsPage.initName = ct.name
-                                           swipeView.setCurrentIndex(2)
-                                       }
-                                   }
+                swipe.onCompleted: {
+                    //Left (delete)
+                    if (swipe.position === 1) {
+                        ct.requestDeleteCounter()
+                        swipe.close()
+                    }
+                    //Right (stats)
+                    else if (swipe.position === -1) {
+                        swipe.close()
+                        statsPage.initName = ct.name
+                        swipeView.setCurrentIndex(2)
+                    }
+                }
+
                 onPressed: swipeView.interactive = false
                 onCanceled: swipeView.interactive = true
             }
@@ -288,32 +277,27 @@ Window {
             id: statsPage
         }
 
-        onCurrentIndexChanged: () =>
-                               {
-                                   if (swipeView.currentIndex !== 1)
-                                   {
-                                       centerStack.replace(mainPageButton)
-                                       //Stats
-                                       if (swipeView.currentIndex === 2)
-                                       {
-                                           statsPage.update()
-                                           statsButton.checked = true
-                                       }
-                                       //Settings
-                                       else if (swipeView.currentIndex === 0)
-                                       {
-                                           settingsPage.counters = backend.getCounters()
-                                           settingsPage.update()
-                                           settingsButton.checked = true
-                                       }
-                                   }
-                                   else
-                                   {
-                                       centerStack.replace(addNewButton)
-                                       statsButton.checked = false
-                                       settingsButton.checked = false
-                                   }
-                               }
+        onCurrentIndexChanged: {
+            if (swipeView.currentIndex !== 1) {
+                centerStack.replace(mainPageButton)
+                //Stats
+                if (swipeView.currentIndex === 2) {
+                    statsPage.update()
+                    statsButton.checked = true
+                }
+                //Settings
+                else if (swipeView.currentIndex === 0) {
+                    settingsPage.counters = backend.getCounters()
+                    settingsPage.update()
+                    settingsButton.checked = true
+                }
+            }
+            else {
+                centerStack.replace(addNewButton)
+                statsButton.checked = false
+                settingsButton.checked = false
+            }
+        }
     }
 
     Rectangle {
@@ -321,7 +305,7 @@ Window {
         y: parent.height - height
         width: parent.width
         height: menuHeight
-        color: Style.secondaryLight
+        color: StyleBackend.getSecondaryLightColor()
 
         Rectangle {
             id: menuRect
@@ -348,7 +332,7 @@ Window {
                     width: 65
                     height: 40
                     icon.source: "qrc:/Resources/sliders.svg"
-                    icon.color: checked ? Style.secondaryLight : Style.text
+                    icon.color: checked ? StyleBackend.getSecondaryLightColor() : Style.text
                     checkable: true
                     autoExclusive: true
                     bottomPadding: 16
@@ -358,16 +342,14 @@ Window {
                     }
                     palette.buttonText: Style.text
 
-                    onCheckedChanged: () =>
-                                      {
-                                          let clr = checked ? Style.secondaryLight : Style.text
-                                          settingsLabel.color = clr
-                                          if (checked)
-                                          {
-                                              centerStack.replace(mainPageButton)
-                                              swipeView.setCurrentIndex(0)
-                                          }
-                                      }
+                    onCheckedChanged: {
+                        let clr = checked ? StyleBackend.getSecondaryLightColor() : Style.text
+                        settingsLabel.color = clr
+                        if (checked) {
+                            centerStack.replace(mainPageButton)
+                            swipeView.setCurrentIndex(0)
+                        }
+                    }
 
                     Text {
                         id: settingsLabel
@@ -417,11 +399,11 @@ Window {
                         icon.width: 16
                         icon.color: Style.text
                         font.pixelSize: 13
-                        palette.button: Style.secondary
+                        palette.button: StyleBackend.getSecondaryColor()
                         palette.buttonText: Style.text
                         leftPadding: 20
                         rightPadding: 20
-                        onPressed: backend.displayNewCounterMessageBox()
+                        onClicked: backend.displayNewCounterMessageBox()
                     }
 
                     Button {
@@ -430,7 +412,7 @@ Window {
                         width: 65
                         height: 40
                         icon.source: "qrc:/Resources/bullseye.svg"
-                        icon.color: checked ? Style.secondaryLight : Style.text
+                        icon.color: checked ? StyleBackend.getSecondaryLightColor() : Style.text
                         bottomPadding: 16
                         background: Rectangle {
                             anchors.fill: parent
@@ -447,12 +429,11 @@ Window {
                         }
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
-                        onPressed: () =>
-                                   {
-                                       statsButton.checked = false
-                                       settingsButton.checked = false
-                                       swipeView.setCurrentIndex(1)
-                                   }
+                        onPressed: {
+                            statsButton.checked = false
+                            settingsButton.checked = false
+                            swipeView.setCurrentIndex(1)
+                        }
                     }
                 }
 
@@ -461,7 +442,7 @@ Window {
                     width: 65
                     height: 40
                     icon.source: "qrc:/Resources/bar-chart-line-fill.svg"
-                    icon.color: checked ? Style.secondaryLight : Style.text
+                    icon.color: checked ? StyleBackend.getSecondaryLightColor() : Style.text
                     checkable: true
                     autoExclusive: true
                     bottomPadding: 16
@@ -470,16 +451,15 @@ Window {
                         color: "transparent"
                     }
                     palette.buttonText: Style.text
-                    onCheckedChanged: () =>
-                                      {
-                                          let clr = checked ? Style.secondaryLight : Style.text
-                                          dataLabel.color = clr
-                                          if (checked)
-                                          {
-                                              swipeView.setCurrentIndex(2)
-                                              statsPage.initName = ""
-                                          }
-                                      }
+                    onCheckedChanged: {
+                        let clr = checked ? StyleBackend.getSecondaryLightColor() : Style.text
+                        dataLabel.color = clr
+                        if (checked)
+                        {
+                            swipeView.setCurrentIndex(2)
+                            statsPage.initName = ""
+                        }
+                    }
 
                     Text {
                         id: dataLabel
@@ -498,9 +478,3 @@ Window {
 
 
 }
-
-/*##^##
-Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
-##^##*/

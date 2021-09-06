@@ -1,7 +1,5 @@
 #include "Counter.h"
 
-#include <QDebug>
-
 Counter::Counter(QObject* parent) : QObject(parent)
 {
 #if defined(Q_OS_IOS)
