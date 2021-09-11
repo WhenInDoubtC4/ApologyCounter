@@ -995,7 +995,7 @@
 				6666AA5E688052234F6758D8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 		DAC4C1AA5EDEA1C85E9CA5E6 /* Build configuration list for PBXProject "ApologyCounter" */ = {
 			isa = XCConfigurationList;
@@ -1004,7 +1004,7 @@
 				339EE1B2CC4FC24589A0EA95 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

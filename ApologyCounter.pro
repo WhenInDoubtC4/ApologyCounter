@@ -53,6 +53,10 @@ android {
 			AndroidUtils.h
 }
 
+macos {
+	ICON = Resources/macIcon.icns
+}
+
 OTHER_FILES += \
 	android/AndroidManifest.xml \
 	android/build.gradle \

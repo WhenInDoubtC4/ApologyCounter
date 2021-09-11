@@ -16,5 +16,7 @@ qrc_qml.cpp
 *.mak
 *.xcuserstate
 *.autosave
+*.keystore
+Release-iphoneos/
 
 IOSWidget/
