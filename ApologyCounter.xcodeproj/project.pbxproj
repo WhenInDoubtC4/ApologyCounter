@@ -52,9 +52,9 @@
 		5E2E60081D3CD185813162AC /* qmldbg_server in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 13F1BD3DEAEFB7911AEA4C21 /* qmldbg_server */; };
 		61EEC397DC8556BF8C4E36A7 /* ImageIO.framework in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 3A8EF9C62A8D4790CBB89CEA /* ImageIO.framework */; };
 		658871D94F32898F7DF5EEA7 /* moc_IOSUtils.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 29D7C7C07F56C42B0CAE52E4 /* moc_IOSUtils.cpp */; settings = {ATTRIBUTES = (); }; };
-		6627CA3826E5543D00A1C221 /* pleadingface.png in Copy Bundle Resources */ = {isa = PBXBuildFile; fileRef = 6627CA3726E5543D00A1C221 /* pleadingface.png */; };
-		6627CA3A26E5545800A1C221 /* Images.xcassets in Copy Bundle Resources */ = {isa = PBXBuildFile; fileRef = 6627CA3926E5545800A1C221 /* Images.xcassets */; };
 		66596B4120994E52AB5304A9 /* Stats.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = C090361F00436F0FBDFBD85E /* Stats.cpp */; settings = {ATTRIBUTES = (); }; };
+		66795DE326ECF66400830D29 /* pleadingface.png in Copy Bundle Resources */ = {isa = PBXBuildFile; fileRef = 66795DE226ECF66400830D29 /* pleadingface.png */; };
+		66795DE526ECF66C00830D29 /* Images.xcassets in Copy Bundle Resources */ = {isa = PBXBuildFile; fileRef = 66795DE426ECF66C00830D29 /* Images.xcassets */; };
 		66ECE6640DFA7EF5E6307923 /* Default-568h@2x.png in Copy Bundle Resources */ = {isa = PBXBuildFile; fileRef = 03B6FA8BEB0A4B05B0731192 /* Default-568h@2x.png */; };
 		68477EDE0DFD8C38EED98940 /* qtquickcontrols2materialstyleplugin in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = E7942FBA821FDBB512694F6D /* qtquickcontrols2materialstyleplugin */; };
 		695C913C09AC118BB2236F01 /* qtiff in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = CF2EC46C0E651516913669C0 /* qtiff */; };
@@ -122,7 +122,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		6627CA3626E5541100A1C221 /* PBXContainerItemProxy */ = {
+		66795DE126ECF63400830D29 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6DB9C3763D02B1415CD9D565 /* Project object */;
 			proxyType = 1;
@@ -188,8 +188,8 @@
 		60E22C033A350114D7CF36BC /* .qmake.stash */ = {isa = PBXFileReference; lastKnownFileType = text; name = .qmake.stash; path = /Users/adam/Desktop/ApologyCounter/ApologyCounter/.qmake.stash; sourceTree = "<absolute>"; };
 		62776A7F8194842BB84F542F /* qios */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = qios; path = "/Users/adam/Qt/5.15.2/ios/plugins/platforms/libqios$(QT_LIBRARY_SUFFIX).a"; sourceTree = "<absolute>"; };
 		64AA128B69934D55A91984B5 /* IOSUtils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = IOSUtils.mm; path = /Users/adam/Desktop/ApologyCounter/ApologyCounter/IOSUtils.mm; sourceTree = "<absolute>"; };
-		6627CA3726E5543D00A1C221 /* pleadingface.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pleadingface.png; path = Resources/pleadingface.png; sourceTree = "<group>"; };
-		6627CA3926E5545800A1C221 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ApologyCounter/Images.xcassets; sourceTree = "<group>"; };
+		66795DE226ECF66400830D29 /* pleadingface.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pleadingface.png; path = Resources/pleadingface.png; sourceTree = "<group>"; };
+		66795DE426ECF66C00830D29 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ApologyCounter/Images.xcassets; sourceTree = "<group>"; };
 		69563FF7AECF9ECA90F94438 /* IOSUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOSUtils.h; path = /Users/adam/Desktop/ApologyCounter/ApologyCounter/IOSUtils.h; sourceTree = "<absolute>"; };
 		6AE3EC31EE5BB1FCEE84137C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = /System/Library/Frameworks/CoreGraphics.framework; sourceTree = "<absolute>"; };
 		745A4ED6D86A2FCD3A465D4E /* qmldbg_native */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = qmldbg_native; path = "/Users/adam/Qt/5.15.2/ios/plugins/qmltooling/libqmldbg_native$(QT_LIBRARY_SUFFIX).a"; sourceTree = "<absolute>"; };
@@ -402,8 +402,8 @@
 		87DF60DE337FB58864343E39 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				6627CA3926E5545800A1C221 /* Images.xcassets */,
-				6627CA3726E5543D00A1C221 /* pleadingface.png */,
+				66795DE426ECF66C00830D29 /* Images.xcassets */,
+				66795DE226ECF66400830D29 /* pleadingface.png */,
 				B332F81A6E8B73A3EF475041 /* qml.qrc */,
 			);
 			name = Resources;
@@ -577,8 +577,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				66ECE6640DFA7EF5E6307923 /* Default-568h@2x.png in Copy Bundle Resources */,
-				6627CA3A26E5545800A1C221 /* Images.xcassets in Copy Bundle Resources */,
-				6627CA3826E5543D00A1C221 /* pleadingface.png in Copy Bundle Resources */,
+				66795DE526ECF66C00830D29 /* Images.xcassets in Copy Bundle Resources */,
+				66795DE326ECF66400830D29 /* pleadingface.png in Copy Bundle Resources */,
 				AAC0D7250B5793EEC59EFE57 /* LaunchScreen.storyboard in Copy Bundle Resources */,
 			);
 			name = "Copy Bundle Resources";
@@ -642,7 +642,7 @@
 		7D215EC00F31A49DDD37D517 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 62B4BBD8FD5C3DCF49BD16EB /* Qt Preprocess */;
-			targetProxy = 6627CA3626E5541100A1C221 /* PBXContainerItemProxy */;
+			targetProxy = 66795DE126ECF63400830D29 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
